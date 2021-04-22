@@ -6,11 +6,22 @@ generate_disks: true
 generate_checksums: true
 generate_local_vars: true
 
+#cmdline: "console=tty0 console=ttyS0,115200"
+
+time_server: time.seagate.com
+
+custom_generate_menus: true
+custom_templates_dir: "/ansible/ralab"
+
 # set desired site name
 # site_name: mysitename.com
 
 # set desired boot domain
 # boot_domain: boot.mysitename.com
+site_name: boot.lyve.colo.seagate.com
+
+# set desired boot domain
+boot_domain: boot.lyve.colo.seagate.com
 
 # set boot version
 # boot_version: "2.x"
@@ -18,6 +29,9 @@ generate_local_vars: true
 # bootloader_tftp_enabled: false
 # bootloader_https_enabled: true
 # bootloader_http_enabled: true
+#bootloader_tftp_enabled: false
+bootloader_https_enabled: false
+bootloader_http_enabled: true
 
 # set release overrides from standard netboot.xyz defaults
 # release_overrides:
