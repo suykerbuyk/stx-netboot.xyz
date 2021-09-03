@@ -81,7 +81,7 @@ isset ${custom_url} && item custom-url ${space} Custom URL Menu ||
 {% endif %}
 {% if custom_generate_menus | bool %}
 item --gap Custom User Menus: ||
-item custom-user ${space} Custom User Menus
+item --key 1 custom-user ${space} 1) Custom User Menus
 {% endif %}
 isset ${menu} && set timeout 0 || set timeout ${boot_timeout}
 choose --timeout ${timeout} --default ${menu} menu || goto local

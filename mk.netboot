@@ -1,0 +1,5 @@
+#!/bin/sh
+
+#docker build  --network n10.10 -t localbuild -f Dockerfile-build .
+docker build  --network host -t netbootxyz -f Dockerfile-build .
+docker run --network host --rm -it -v $(pwd):/buildout netbootxyz

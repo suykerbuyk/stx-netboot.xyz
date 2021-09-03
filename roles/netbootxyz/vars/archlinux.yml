@@ -1,0 +1,15 @@
+---
+netbootxyz_packages:
+  - apache2
+  - figlet
+  - binutils
+  - binutils-aarch64-linux-gnu
+  - dosfstools
+  - figlet
+  - gcc-aarch64-linux-gnu
+  - build-essential
+  - genisoimage
+  - git
+  - isolinux
+  - liblzma-dev
+
