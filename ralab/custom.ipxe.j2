@@ -2,15 +2,9 @@
 ###
 ### boot.lyve.colo.seagate.com custom menu example
 ###
-#http://repo/rhel/boot/8.3/x86_64/vmlinuz... ok
-#"Loading RHEL 8"
-#http://repo/rhel/boot/8.3/x86_64/vmlinuz... ok
-#http://repo/rhel/boot/8.3/x86_64/initrd.img... ok
-#initrd=initrd... No such file or directory (http://ipxe.org/2d0c618e)
-#Could not boot: No such file or directory (http://ipxe.org/2d0c618e)
-#Could not boot: No such file or directory (http://ipxe.org/2d0c618e)
-#HTTP has failed, localbooting...
 #
+# Check the links:
+# for X in $(cat ralab/custom.ipxe.j2 | sed 's/ /\n/g' | grep 'http://'  | grep -v inst.dd | grep rhel | sed 's/repo=//g' | sed 's/ks=//g') ; do curl ${X} >/dev/null; done
 #inst.dd=http://repo.lyve.colo.seagate.com/rhel/iso/8.3/dd-3w-9xxx-2.26.02.014-5.el8_3.elrepo.iso
 #inst.dd=http://repo.lyve.colo.seagate.com/rhel/iso/8.3/dd-3w-sas-3.26.02.000-5.el8_3.elrepo.iso
 #inst.dd=http://repo.lyve.colo.seagate.com/rhel/iso/8.3/dd-3w-xxxx-2.26.02.003-4.el8_3.elrepo.iso
@@ -62,7 +56,7 @@ goto custom_exit
 echo "Bootstrapping RHEL 8.4 AutoDiskSelect"
 imgstat
 imgfree
-kernel http://repo/rhel/pkg/8.4/rhel-8.4-x86_64-dvd/images/pxeboot/vmlinuz initrd=initrd.img repo=http://repo.lyve.colo.seagate.com/rhel/pkg/8.4/rhel-8.4-x86_64-dvd/ ksdevice=link devfs=nomount ip=dhcp inst.text inst.sshd console=ttyS0,115200n8 ks=http://repo.lyve.colo.seagate.com/repo/rhel8.4-ks-autodisk.cfg
+kernel http://repo.lyve.colo.seagate.com/rhel/pkg/8.4/rhel-8.4-x86_64-dvd/images/pxeboot/vmlinuz initrd=initrd.img repo=http://repo.lyve.colo.seagate.com/rhel/pkg/8.4/rhel-8.4-x86_64-dvd/ ksdevice=link devfs=nomount ip=dhcp inst.text inst.sshd console=ttyS0,115200n8 ks=http://repo.lyve.colo.seagate.com/rhel/rhel8.4-ks-autodisk.cfg
 initrd http://repo/rhel/pkg/8.4/rhel-8.4-x86_64-dvd/images/pxeboot/initrd.img
 boot || goto custom_exit
 
@@ -70,15 +64,15 @@ boot || goto custom_exit
 echo "Bootstrapping RHEL 8.3 AutoDiskSelect"
 imgstat
 imgfree
-kernel http://repo/rhel/pkg/8.3/rhel-8.3-x86_64-dvd/images/pxeboot/vmlinuz initrd=initrd.img repo=http://repo.lyve.colo.seagate.com/rhel/pkg/8.3/rhel-8.3-x86_64-dvd/ ksdevice=link devfs=nomount ip=dhcp inst.text inst.sshd console=ttyS0,115200n8 ks=http://repo.lyve.colo.seagate.com/rhel/rhel8.3-ks-autodisk.cfg
-initrd http://repo/rhel/pkg/8.3/rhel-8.3-x86_64-dvd/images/pxeboot/initrd.img
+kernel http://repo.lyve.colo.seagate.com/rhel/pkg/8.3/rhel-8.3-x86_64-dvd/images/pxeboot/vmlinuz initrd=initrd.img repo=http://repo.lyve.colo.seagate.com/rhel/pkg/8.3/rhel-8.3-x86_64-dvd/ ksdevice=link devfs=nomount ip=dhcp inst.text inst.sshd console=ttyS0,115200n8 ks=http://repo.lyve.colo.seagate.com/rhel/rhel8.3-ks-autodisk.cfg
+initrd http://repo.lyve.colo.seagate.com/rhel/pkg/8.3/rhel-8.3-x86_64-dvd/images/pxeboot/initrd.img
 boot || goto custom_exit
 
 :rhel83_driver_disk
 echo "Bootstrapping RHEL 8.3 AutoDiskSelect and Driver Disks"
 imgstat
 imgfree
-kernel http://repo/rhel/pkg/8.3/rhel-8.3-x86_64-dvd/images/pxeboot/vmlinuz initrd=initrd.img repo=http://repo.lyve.colo.seagate.com/rhel/pkg/8.3/rhel-8.3-x86_64-dvd/ ksdevice=link devfs=nomount ip=dhcp inst.text inst.sshd console=ttyS0,115200n8 ks=http://repo.lyve.colo.seagate.com/rhel/rhel8-ks-autodisk.cfg inst.dd=http://repo.lyve.colo.seagate.com/rhel/iso/8.3/dd-mpt3sas-34.100.00.00-1.el8_3.elrepo.iso inst.dd=http://repo.lyve.colo.seagate.com/rhel/iso/8.3/dd-mptsas-3.04.20-4.el8_3.elrepo.iso
+kernel http://repo.lyve.colo.seagate.com/rhel/pkg/8.3/rhel-8.3-x86_64-dvd/images/pxeboot/vmlinuz initrd=initrd.img repo=http://repo.lyve.colo.seagate.com/rhel/pkg/8.3/rhel-8.3-x86_64-dvd/ ksdevice=link devfs=nomount ip=dhcp inst.text inst.sshd console=ttyS0,115200n8 ks=http://repo.lyve.colo.seagate.com/rhel8-ks-autodisk.cfg inst.dd=http://repo.lyve.colo.seagate.com/rhel/iso/8.3/dd-mpt3sas-34.100.00.00-1.el8_3.elrepo.iso inst.dd=http://repo.lyve.colo.seagate.com/iso/8.3/dd-mptsas-3.04.20-4.el8_3.elrepo.iso
 initrd http://repo/rhel/pkg/8.3/rhel-8.3-x86_64-dvd/images/pxeboot/initrd.img
 boot || goto custom_exit
 
