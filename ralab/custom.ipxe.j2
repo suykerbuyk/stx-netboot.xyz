@@ -1,6 +1,6 @@
 #!ipxe
 ###
-### {{ site_name }} custom menu example
+### boot.lyve.colo.seagate.com custom menu example
 ###
 #http://repo/rhel/boot/8.3/x86_64/vmlinuz... ok
 #"Loading RHEL 8"
@@ -41,14 +41,16 @@
 
 :custom
 clear custom_choice
-menu This is a Test Menu
+menu RHEL Options:
 item --gap This is the first sub menu
-item --key 1 rhel83_autodisk ${space} 1) RHEL 8.3 via AutoDisk Select
-item --key 2 rhel83_driver_disk ${space} 2) RHEL 8.3 via AutoDisk & Driver Disks
-item --key 3 ra_ubuntu ${space} 3) Upstream ubuntu releases.
+item --key 1 rhel84_autodisk ${space} 1) RHEL 8.4 via AutoDisk Select
+item --key 2 rhel83_autodisk ${space} 2) RHEL 8.3 via AutoDisk Select
+item --key 3 rhel83_driver_disk ${space} 3) RHEL 8.3 via AutoDisk & Driver Disks
+item --gap Other Options:
 item option_two ${space} Loading an ISO
-item --gap This is a second sub menu
-item ra_archlinux ${space} 4) Install Arch Linux
+item --key 4 ra_ubuntu ${space} 4) Upstream ubuntu releases.
+item --key 5 suse_15sp2 ${space} 5) SuSE SLES 15 SP2
+item ra_archlinux ${space} 6) Install Arch Linux
 item option_four ${space} This is option four
 choose custom_choice || goto custom_exit
 echo ${cls}
@@ -56,21 +58,38 @@ echo "Choose ${custom_choice}"
 goto ${custom_choice}
 goto custom_exit
 
+:rhel84_autodisk
+echo "Bootstrapping RHEL 8.4 AutoDiskSelect"
+imgstat
+imgfree
+kernel http://repo/rhel/pkg/8.4/rhel-8.4-x86_64-dvd/images/pxeboot/vmlinuz initrd=initrd.img repo=http://repo.lyve.colo.seagate.com/rhel/pkg/8.4/rhel-8.4-x86_64-dvd/ ksdevice=link devfs=nomount ip=dhcp inst.text inst.sshd console=ttyS0,115200n8 ks=http://repo.lyve.colo.seagate.com/repo/rhel8.4-ks-autodisk.cfg
+initrd http://repo/rhel/pkg/8.4/rhel-8.4-x86_64-dvd/images/pxeboot/initrd.img
+boot || goto custom_exit
+
 :rhel83_autodisk
 echo "Bootstrapping RHEL 8.3 AutoDiskSelect"
 imgstat
 imgfree
-kernel http://repo/rhel/boot/8.3/x86_64/vmlinuz initrd=initrd.img repo=http://mgmt.lyve.colo.seagate.com/repo/rhel/pkg/8.3/rhel-8.3-x86_64-dvd/ ksdevice=link devfs=nomount ip=dhcp inst.text inst.sshd console=ttyS0,115200n8 ks=http://mgmt.lyve.colo.seagate.com/repo/rhel/rhel8-ks-autodisk.cfg
-initrd http://repo/rhel/boot/8.3/x86_64/initrd.img
+kernel http://repo/rhel/pkg/8.3/rhel-8.3-x86_64-dvd/images/pxeboot/vmlinuz initrd=initrd.img repo=http://repo.lyve.colo.seagate.com/rhel/pkg/8.3/rhel-8.3-x86_64-dvd/ ksdevice=link devfs=nomount ip=dhcp inst.text inst.sshd console=ttyS0,115200n8 ks=http://repo.lyve.colo.seagate.com/rhel/rhel8.3-ks-autodisk.cfg
+initrd http://repo/rhel/pkg/8.3/rhel-8.3-x86_64-dvd/images/pxeboot/initrd.img
 boot || goto custom_exit
 
 :rhel83_driver_disk
 echo "Bootstrapping RHEL 8.3 AutoDiskSelect and Driver Disks"
 imgstat
 imgfree
-kernel http://repo/rhel/boot/8.3/x86_64/vmlinuz initrd=initrd.img repo=http://mgmt.lyve.colo.seagate.com/repo/rhel/pkg/8.3/rhel-8.3-x86_64-dvd/ ksdevice=link devfs=nomount ip=dhcp inst.text inst.sshd console=ttyS0,115200n8 ks=http://mgmt.lyve.colo.seagate.com/repo/rhel/rhel8-ks-autodisk.cfg inst.dd=http://repo.lyve.colo.seagate.com/rhel/iso/8.3/dd-mpt3sas-34.100.00.00-1.el8_3.elrepo.iso inst.dd=http://repo.lyve.colo.seagate.com/rhel/iso/8.3/dd-mptsas-3.04.20-4.el8_3.elrepo.iso
-initrd http://repo/rhel/boot/8.3/x86_64/initrd.img
+kernel http://repo/rhel/pkg/8.3/rhel-8.3-x86_64-dvd/images/pxeboot/vmlinuz initrd=initrd.img repo=http://repo.lyve.colo.seagate.com/rhel/pkg/8.3/rhel-8.3-x86_64-dvd/ ksdevice=link devfs=nomount ip=dhcp inst.text inst.sshd console=ttyS0,115200n8 ks=http://repo.lyve.colo.seagate.com/rhel/rhel8-ks-autodisk.cfg inst.dd=http://repo.lyve.colo.seagate.com/rhel/iso/8.3/dd-mpt3sas-34.100.00.00-1.el8_3.elrepo.iso inst.dd=http://repo.lyve.colo.seagate.com/rhel/iso/8.3/dd-mptsas-3.04.20-4.el8_3.elrepo.iso
+initrd http://repo/rhel/pkg/8.3/rhel-8.3-x86_64-dvd/images/pxeboot/initrd.img
 boot || goto custom_exit
+
+:suse_15sp2
+imgstat
+imgfree
+kernel http://repo.lyve.colo.seagate.com/suse/15.2/pkg/SLE-15-SP2-Full-x86_64-GM-Media1/boot/x86_64/loader/linux
+initrd http://repo.lyve.colo.seagate.com/suse/15.2/pkg/SLE-15-SP2-Full-x86_64-GM-Media1/boot/x86_64/loader/initrd
+imgargs linux initrd=initrd biosdevname=0 net.ifnames=1 namescheme=by-path sshd=1 password=root instsys=http://repo.lyve.colo.seagate.com/suse/15.2/pkg/SLE-15-SP2-Full-x86_64-GM-Media1/boot/x86_64/root textmode=1 TERM=xterm install=http://repo.lyve.colo.seagate.com/suse/15.2/pkg/SLE-15-SP2-Full-x86_64-GM-Media1/ ifcfg=*=try,dhcp console=ttyS0,115200n8 AutoYaST=http://repo.lyve.colo.seagate.com/suse/15.2/autoinst-i2u.xml
+boot || goto custom_exit
+
 
 :ra_ubuntu
 echo "BootStrap RA Ubuntu Linux"
