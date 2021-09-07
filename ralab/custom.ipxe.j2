@@ -56,7 +56,7 @@ goto custom_exit
 echo "Bootstrapping RHEL 8.4 AutoDiskSelect"
 imgstat
 imgfree
-kernel http://repo.lyve.colo.seagate.com/rhel/pkg/8.4/rhel-8.4-x86_64-dvd/images/pxeboot/vmlinuz initrd=initrd.img repo=http://repo.lyve.colo.seagate.com/rhel/pkg/8.4/rhel-8.4-x86_64-dvd/ ksdevice=link devfs=nomount ip=dhcp inst.text inst.sshd console=ttyS0,115200n8 ks=http://repo.lyve.colo.seagate.com/rhel/rhel8.4-ks-autodisk.cfg
+kernel http://repo.lyve.colo.seagate.com/rhel/pkg/8.4/rhel-8.4-x86_64-dvd/images/pxeboot/vmlinuz initrd=initrd.img repo=http://repo.lyve.colo.seagate.com/rhel/pkg/8.4/rhel-8.4-x86_64-dvd/ ksdevice=link devfs=nomount ip=dhcp inst.text inst.sshd console=ttyS0,115200n8 inst.ks=http://repo.lyve.colo.seagate.com/rhel/rhel8.4-ks-autodisk.cfg
 initrd http://repo/rhel/pkg/8.4/rhel-8.4-x86_64-dvd/images/pxeboot/initrd.img
 boot || goto custom_exit
 
