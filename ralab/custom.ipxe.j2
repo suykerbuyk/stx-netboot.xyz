@@ -37,20 +37,29 @@
 clear custom_choice
 menu RHEL Options:
 item --gap This is the first sub menu
-item --key 1 rhel84_autodisk ${space} 1) RHEL 8.4 via AutoDisk Select
-item --key 2 rhel83_autodisk ${space} 2) RHEL 8.3 via AutoDisk Select
-item --key 3 rhel83_driver_disk ${space} 3) RHEL 8.3 via AutoDisk & Driver Disks
+item --key 1 acronis ${space} 1) Acronis
+item --key 2 rhel84_autodisk ${space} 2) RHEL 8.4 via AutoDisk Select
+item --key 3 rhel83_autodisk ${space} 3) RHEL 8.3 via AutoDisk Select
+item --key 4 rhel83_driver_disk ${space} 4) RHEL 8.3 via AutoDisk & Driver Disks
 item --gap Other Options:
 item option_two ${space} Loading an ISO
-item --key 4 ra_ubuntu ${space} 4) Upstream ubuntu releases.
-item --key 5 suse_15sp2 ${space} 5) SuSE SLES 15 SP2
-item ra_archlinux ${space} 6) Install Arch Linux
+item --key 5 ra_ubuntu ${space} 5) Upstream ubuntu releases.
+item --key 6 suse_15sp2 ${space} 6) SuSE SLES 15 SP2
+item --key 7 ra_archlinux ${space} 7) Install Arch Linux
 item option_four ${space} This is option four
 choose custom_choice || goto custom_exit
 echo ${cls}
 echo "Choose ${custom_choice}"
 goto ${custom_choice}
 goto custom_exit
+
+:acronis
+echo "Bootstrapping Acronis Cyber Infrastructure 4.6"
+imgstat
+imgfree
+kernel http://repo.lyve.colo.seagate.com/acronis/extract/images/pxeboot/vmlinuz initrd=initrd.img repo=http://repo.lyve.colo.seagate.com/acronis/extract/ devfs=nomount ip=dhcp inst.text inst.sshd console=ttyS0,115200n8 inst.ks=http://repo.lyve.colo.seagate.com/acronis/acronis-ks.cfg
+initrd http://repo.lyve.colo.seagate.com/acronis/extract/images/pxeboot/initrd.img
+boot || goto custom_exit
 
 :rhel84_autodisk
 echo "Bootstrapping RHEL 8.4 AutoDiskSelect"
