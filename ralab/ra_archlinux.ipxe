@@ -3,10 +3,15 @@
 # Arch Linux Operating System
 # http://www.archlinux.org
 
+set archlinux_mirror repo.lyve.colo.seagate.com
+set archlinux_base_dir arch/archlinux
+
 isset ${dhcp-server} || goto static_ip
 set ipparam BOOTIF=${netX/mac} ip=dhcp
 set real_archlinux_mirror ${archlinux_mirror}
-set cmdline "console=console=ttyS0,115200n8 text"
+# You can specify multiple console= options on the kernel command line. Output will appear on all of them.
+# The last device will be used when you open /dev/console.  We want the serial port to be the default, so it is last in the list.
+set cmdline console=tty0 console=ttyS0,115200n8 text debug log.nologo ds=nocloud-net;s=http://repo.lyve.colo.seagate.com/arch/cloud-init/live-installer/
 goto goto_menu
 
 :static_ip
@@ -23,16 +28,19 @@ goto ${menu} ||
 set os Arch Linux
 clear arch_version
 menu ${os} - ${arch}
-item --gap Latest Releases
-item 2021.04.01 ${space} ${os} 2021.04.01
+item --gap Arch Linux with local cloud init
+item --key 1 latest ${space} ${os} 1) Latest with RA Lab cloud-init
+item --key 2 2022.01.01 ${space} ${os} 2) 2022.01.01
+item --key 3 2021.12.01 ${space} ${os} 3) 2021.12.01
+item --key 4 2021.11.01 ${space} ${os} 4) 2021.11.01
 choose arch_version || goto archlinux_exit
 goto boot
 
 :boot
 imgfree
 set dir ${archlinux_base_dir}/iso/${arch_version}/arch/boot
-set params initrd=initramfs-linux.img archiso_http_srv=http://${real_archlinux_mirror}/${archlinux_base_dir}/iso/${arch_version}/ archisobasedir=arch verify=y ${ipparam} net.ifnames=0 ${cmdline}
-kernel http://${archlinux_mirror}/${dir}/x86_64/vmlinuz-linux ${params} initrd=initramfs-linux.img
+set params initrd=initramfs-linux.img archiso_http_srv=http://${real_archlinux_mirror}/${archlinux_base_dir}/iso/${arch_version}/ archisobasedir=arch verify=y ${ipparam} net.ifnames=1 cow_spacesize=10G ${cmdline}
+kernel http://${archlinux_mirror}/${dir}/x86_64/vmlinuz-linux initrd=initrd.magic ${params}
 initrd http://${archlinux_mirror}/${dir}/x86_64/initramfs-linux.img
 echo
 echo MD5sums:
@@ -43,3 +51,4 @@ goto archlinux_exit
 :archlinux_exit
 clear menu
 exit 0
+
